@@ -44,6 +44,8 @@ def transformation(block):
 
 
 def cp(matrice, x, z):
+	"""Calcul de la parité de la colonne situé à l'emplacement x, z"""
+	
 	res = str(
 	int(matrice[x][0][z]) ^
 	int(matrice[x][1][z]) ^
@@ -55,9 +57,18 @@ def cp(matrice, x, z):
 
 
 def theta(matrice):
-	"""Fonction theta de Keccak realiser sur une matrice de 1600 bits decouper en matrice 5*5*64"""
+	"""Fonction theta de Keccak realisé sur une matrice de 1600 bits decouper en matrice 5*5*64"""
 	res = [['0'*64 for i in range(5)] for i in range(5)]
-	
+	for x in range(5):
+		for y in range(5):
+			for z in range(64):
+				res[x][y] = res[x][y][:z] + \
+				str(
+				int(matrice[x][y][z]) ^
+				int(cp(matrice, (x+1)%5, (z-1)%64)) ^
+				int(cp(matrice, (x-1)%5, z))
+				) + \
+				res[x][y][(z+1):]
 	return res
 
 
@@ -66,9 +77,10 @@ def f(block):
 	pass
 
 if __name__ == "__main__" :
-	init = '0'*1600
+	init = '1'+'0'*1599
 	mat = transformation(init)
 	print(cp(mat, 0, 0)) 
+	print(theta(mat))
 
 
 
