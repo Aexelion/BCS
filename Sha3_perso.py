@@ -73,7 +73,7 @@ def theta(matrice):
 
 
 def rho(matrice):
-	"""Fonction rho de Keccak réaliser sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un ensemble de rotation sur les mots de 64 bits dans la matrice 5*5."""
+	"""Fonction rho de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un ensemble de rotation sur les mots de 64 bits dans la matrice 5*5."""
 	
 	rotation = [[0,36,3,41,18],[1,44,10,45,2],[62,6,43,15,61],[28,55,25,21,56],[27,20,39,8,14]]
 	res = [['0'*64 for i in range(5)] for i in range(5)]
@@ -81,6 +81,16 @@ def rho(matrice):
 		for y in range(5):
 			res[x][y] = matrice[x][y][rotation[x][y]:] + matrice[x][y][:rotation[x][y]]
 	return res
+
+
+def pi(matrice):
+	"""Fonction pi de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un mélange des mots de 64 bits dans la matrice 5*5."""
+	
+	res = [['0'*64 for i in range(5)] for i in range(5)]
+	for x in range(5):
+		for y in range(5):
+			res[x][y] = matrice[y][(2*x+3*y)%5]
+
 
 
 def f(block):
