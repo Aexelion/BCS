@@ -92,6 +92,21 @@ def pi(matrice):
 			res[x][y] = matrice[y][(2*x+3*y)%5]
 
 
+def khi(matrice):
+	"""Fonction khi de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un ensemble d'opération sur les différents bits de la matrice."""
+	
+	res = [['0'*64 for i in range(5)] for i in range(5)]
+	for x in range(5):
+		for y in range(5):
+			for z in range(64):
+				res[x][y] = res[x][y][:z] + \
+				str(
+				int(matrice[x][y][z]) ^
+				((int(matrice[(x+1)%5][y][z]) ^ 1) &
+				int(matrice[(x+2)%5][y][z]))
+				) + \
+				res[x][y][(z+1):]
+
 
 def f(block):
 	"""Fonction de permutation de Keccak"""
@@ -100,8 +115,6 @@ def f(block):
 if __name__ == "__main__" :
 	init = '1'+'0'*1599
 	mat = transformation(init)
-	print(cp(mat, 0, 0)) 
-	print(theta(mat))
 
 
 
