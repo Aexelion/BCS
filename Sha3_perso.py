@@ -90,6 +90,7 @@ def pi(matrice):
 	for x in range(5):
 		for y in range(5):
 			res[x][y] = matrice[y][(2*x+3*y)%5]
+	return res
 
 
 def khi(matrice):
@@ -106,6 +107,23 @@ def khi(matrice):
 				int(matrice[(x+2)%5][y][z]))
 				) + \
 				res[x][y][(z+1):]
+		return res
+
+
+def iota(matrice, roundNb):
+	"""Fonction iota de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Ajout d'une constante sur la 1ere ligne de la matrice (située en 0,0)."""
+	
+	RC = ['0'*64 for i in range(24)] #TODO trouver les valeurs de RC
+	res = [[matrice[i][j] for i in range(5)] for j in range(5)]
+	for z in range(64):
+		res[0][0] = res[0][0][:z] + \
+		str(
+		int(matrice[0][0][z]) ^
+		RC[0][z]
+		) + \
+		res[0][0][(z+1):]
+	return res
+		
 
 
 def f(block):
