@@ -8,6 +8,7 @@
 
 def padding(M,r):
 	"""Ajoute du padding a un message quelconque afin de le rendre de taille multiple de r"""
+	
 	val = len(M + '11') % r
 	res = M + '1' + '0'*((r-val)%r) + '1'
 	return res
@@ -15,18 +16,15 @@ def padding(M,r):
 
 def toBlock(M, r):
 	"""Transforme un message de taille multiple de r en un tableau de partie de message tous de taille r"""
+	
 	k = len(M) // r
 	m = [M[r*i:(r+1)*i] for i in range(k)]
 	return m
 
 
-def createInit(tailleBlock=1600):
-	"""Creer un block de taille tailleBlock (1600 par defaut) bits"""
-	return '0'*tailleBlock
-
-
 def xor(block, m, r):
 	"""Realise un xor bit a bit entre un block de taille > r et un message de taille r"""
+	
 	res = [block[i] for i in range(len(block))]
 	for i in range(r):
 		res[i] = str(int(block[i])^int(m[i]))
@@ -35,6 +33,7 @@ def xor(block, m, r):
 
 def transformation(block):
 	"""Transforme un block de 1600 bits en une matrice 3 dimension 5*5*64"""
+	
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for ligne in range(5):
 		for colonne in range(5):
@@ -57,7 +56,8 @@ def cp(matrice, x, z):
 
 
 def theta(matrice):
-	"""Fonction theta de Keccak realisé sur une matrice de 1600 bits decouper en matrice 5*5*64"""
+	"""Fonction theta de Keccak realisé sur une matrice de 1600 bits découpé en matrice 5*5*64. Réalisation d'un ensemble de xor sur les différents bits de la matrice"""
+	
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for x in range(5):
 		for y in range(5):
@@ -69,6 +69,17 @@ def theta(matrice):
 				int(cp(matrice, (x-1)%5, z))
 				) + \
 				res[x][y][(z+1):]
+	return res
+
+
+def rho(matrice):
+	"""Fonction rho de Keccak réaliser sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un ensemble de rotation sur les mots de 64 bits dans la matrice 5*5."""
+	
+	rotation = [[0,36,3,41,18],[1,44,10,45,2],[62,6,43,15,61],[28,55,25,21,56],[27,20,39,8,14]]
+	res = [['0'*64 for i in range(5)] for i in range(5)]
+	for x in range(5):
+		for y in range(5):
+			res[x][y] = matrice[x][y][rotation[x][y]:] + matrice[x][y][:rotation[x][y]]
 	return res
 
 
