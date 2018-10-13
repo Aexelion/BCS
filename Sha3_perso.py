@@ -162,13 +162,13 @@ def f(block):
 	return res
 
 
-##Sha3-512 : r = 512; c = 1024
+##Sha3-512 : r = 576; c = 1024
 ##Sha3-384 : r = 832; c = 768
 ##Sha3-256 : r = 1088; c = 512
 ##Sha3-224 : r = 1152; c = 448
 
 def keccak(M, version):
-	v = {512:512, 384:832, 256:1088, 224:1152}
+	v = {512:576, 384:832, 256:1088, 224:1152}
 	if (not version in v):
 		print('Version non valide pour Keccak.')
 		exit(1)
