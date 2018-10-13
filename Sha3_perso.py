@@ -1,10 +1,5 @@
 #! /usr/bin/python3
 
-##Sha3-512 : r = 512; c = 1024
-##Sha3-384 : r = 832; c = 768
-##Sha3-256 : r = 1088; c = 512
-##Sha3-224 : r = 1152; c = 448
-
 
 def padding(M,r):
 	"""Ajoute du padding a un message quelconque afin de le rendre de taille multiple de r."""
@@ -18,7 +13,7 @@ def toBlock(M, r):
 	"""Transforme un message de taille multiple de r en un tableau de partie de message tous de taille r."""
 	
 	k = len(M) // r
-	m = [M[r*i:(r+1)*i] for i in range(k)]
+	m = [M[r*i:r*(i+1)] for i in range(k)]
 	return m
 
 
@@ -48,7 +43,7 @@ def detransformation(matrice):
 	res = ''
 	for ligne in range(5):
 		for colonne in range(5):
-			res += matrice[ligne][matrice]
+			res += matrice[ligne][colonne]
 	return res
 
 
@@ -152,7 +147,6 @@ def iota(matrice, roundNb):
 		) + \
 		res[0][0][(z+1):]
 	return res
-		
 
 
 def f(block):
@@ -167,10 +161,36 @@ def f(block):
 	res = detransformation(matrice)
 	return res
 
-if __name__ == "__main__" :
-	init = '1'+'0'*1599
-	mat = transformation(init)
 
+##Sha3-512 : r = 512; c = 1024
+##Sha3-384 : r = 832; c = 768
+##Sha3-256 : r = 1088; c = 512
+##Sha3-224 : r = 1152; c = 448
+
+def keccak(M, version):
+	v = {512:512, 384:832, 256:1088, 224:1152}
+	if (not version in v):
+		print('Version non valide pour Keccak.')
+		exit(1)
+	else :
+		r = v[version]
+		c = 1600-r
+	
+	tmp = padding(M, r)
+	ensMessage = toBlock(tmp, r)
+	block = '0'*1600
+	
+	for m in ensMessage:
+		block = xor(block, m, r)
+		block = f(block)
+	
+	res = block[:version]
+	return res
+
+
+if __name__ == "__main__" :
+	res = keccak('0011', 512)
+	print(len(res), res)
 
 
 
