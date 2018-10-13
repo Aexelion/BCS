@@ -72,8 +72,7 @@ def theta(matrice):
 				int(matrice[x][y][z]) ^
 				int(cp(matrice, (x+1)%5, (z-1)%64)) ^
 				int(cp(matrice, (x-1)%5, z))
-				) + \
-				res[x][y][(z+1):]
+				)
 	return res
 
 
@@ -110,9 +109,8 @@ def khi(matrice):
 				int(matrice[x][y][z]) ^
 				((int(matrice[(x+1)%5][y][z]) ^ 1) &
 				int(matrice[(x+2)%5][y][z]))
-				) + \
-				res[x][y][(z+1):]
-		return res
+				)
+	return res
 
 
 def hexToBin(hexa):
@@ -138,14 +136,13 @@ def iota(matrice, roundNb):
 	
 	binRC = hexToBin(RC[roundNb])
 	
-	res = [[matrice[i][j] for i in range(5)] for j in range(5)]
+	res = [[matrice[j][i] for i in range(5)] for j in range(5)]
 	for z in range(64):
 		res[0][0] = res[0][0][:z] + \
 		str(
 		int(matrice[0][0][z]) ^
 		int(binRC[z])
-		) + \
-		res[0][0][(z+1):]
+		)
 	return res
 
 
@@ -189,8 +186,8 @@ def keccak(M, version):
 
 
 if __name__ == "__main__" :
-	res = keccak('0011', 512)
-	print(len(res), res)
+	res = keccak('0110', 512)
+	print("miaou")
 
 
 
