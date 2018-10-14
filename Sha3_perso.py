@@ -93,7 +93,7 @@ def pi(matrice):
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for x in range(5):
 		for y in range(5):
-			res[x][y] = matrice[y][(2*x+3*y)%5]
+			res[y][(2*x+3*y)%5] = matrice[x][y]
 	return res
 
 
@@ -146,10 +146,12 @@ def iota(matrice, roundNb):
 	return res
 
 
-def f(block):
+def f(block, nbRound):
 	"""Fonction de permutation de Keccak."""
+	#print(block)
 	matrice = transformation(block)
-	for i in range(24):
+	#print(matrice)
+	for i in range(nbRound):
 		matrice = theta(matrice)
 		matrice = rho(matrice)
 		matrice = pi(matrice)
@@ -179,15 +181,17 @@ def keccak(M, version):
 	
 	for m in ensMessage:
 		block = xor(block, m, r)
-		block = f(block)
+		block = f(block, 24)
 	
 	res = block[:version]
 	return res
 
 
 if __name__ == "__main__" :
-	res = keccak('0110', 512)
-	print("miaou")
+	res = keccak('11010011', 512)
+	print(len(res), res)
+	print("\nMiaou !\n")
+	print("___/|\n\o.o|\n(___)\n  U")
 
 
 
