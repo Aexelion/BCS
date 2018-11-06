@@ -34,7 +34,7 @@ def CMAC(hexa, key1, key2):
 
 if __name__ == '__main__' :
 	key = [0 for i in range(32)]
-	message = 'abcdefghijklmnopqrstuvwxz0123456789ABCDEFGHIJKLMNOPQRSTUVWXZ'
+	message = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 	hexa = trad.strToHex(message)
 	mac = CMAC(hexa, key, key)
 	print("MAC du message :", mac)

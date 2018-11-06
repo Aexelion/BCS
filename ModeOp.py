@@ -44,7 +44,7 @@ def CTR(nonce, hexa, key, mode=0):
 if __name__ == '__main__' :	
 	nonce = 123456789
 	key = [0 for i in range(32)]
-	message = 'abcdefghijklmnopqrstuvwxz0123456789ABCDEFGHIJKLMNOPQRSTUVWXZ'
+	message = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 	hexa = trad.strToHex(message)
 	
 	tmp = CTR(nonce, hexa, key, 0)
