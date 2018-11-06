@@ -20,18 +20,15 @@ def convert(nb):
 	return res[:8]
 
 
-def CTR(nonce, message, key, mode=0):
+def CTR(nonce, hexa, key, mode=0):
 	ctr = 0
-	hexa = message
-	if mode == 0:
-		hexa = trad.strToHex(hexa)
 	M = decoupe(hexa)
 	C = []
 	strNonce = convert(nonce)
 	for Mi in M:
 		strCtr = convert(ctr)
 		strInput = strNonce + strCtr
-		Input = [int(strInput[i], 16) for i in range(len(strInput))]
+		Input = [int(strInput[i], 16) for i in range(16)]
 		tmp = midori(Input, key)
 		Ci = ''
 		for j in range(16):
@@ -48,7 +45,9 @@ if __name__ == '__main__' :
 	nonce = 123456789
 	key = [0 for i in range(32)]
 	message = 'abcdefghijklmnopqrstuvwxz0123456789ABCDEFGHIJKLMNOPQRSTUVWXZ'
-	tmp = CTR(nonce, message, key, 0)
+	hexa = trad.strToHex(message)
+	
+	tmp = CTR(nonce, hexa, key, 0)
 	print("Message après chiffrement (Midori - CTR) :", tmp)
 	tmp2 = CTR(nonce, tmp, key, 1)
 	print("Message après déchiffrement (Midori - CTR) :", tmp2)
