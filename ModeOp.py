@@ -20,7 +20,7 @@ def convert(nb):
 	return res[:8]
 
 
-def CTR(nonce, hexa, key, mode=0):
+def CTR(nonce, hexa, key):
 	ctr = 0
 	M = decoupe(hexa)
 	C = []
@@ -41,15 +41,15 @@ def CTR(nonce, hexa, key, mode=0):
 	return res
 
 
-if __name__ == '__main__' :	
+if __name__ == '__main__' :
 	nonce = 123456789
 	key = [0 for i in range(32)]
 	message = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 	hexa = trad.strToHex(message)
 	
-	tmp = CTR(nonce, hexa, key, 0)
+	tmp = CTR(nonce, hexa, key)
 	print("Message après chiffrement (Midori - CTR) :", tmp)
-	tmp2 = CTR(nonce, tmp, key, 1)
+	tmp2 = CTR(nonce, tmp, key)
 	print("Message après déchiffrement (Midori - CTR) :", tmp2)
 	print("Traduction inverse du déchiffrement :", trad.hexToStr(tmp2))
 	
