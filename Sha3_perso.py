@@ -167,6 +167,7 @@ def f(block, nbRound):
 ##Sha3-224 : r = 1152; c = 448
 
 def keccak(M, version):
+	"""Fonction de hash SHA-3. M est un message traduit en binaire. version est la version de keccak utilisé."""
 	v = {512:576, 384:832, 256:1088, 224:1152}
 	if (not version in v):
 		print('Version non valide pour Keccak.')
