@@ -30,6 +30,19 @@ def binToStr(b):
 	return res
 
 
+def binToHex(b):
+	res = ''
+	for i in range(0, len(b), 8):
+		res += hex(int(b[i:i+8], 2))[2:]
+	return res
+
+
+def hexToBin(h):
+	res = ''
+	for i in range(0, len(h), 2) :
+		res += bin(int(h[i:i+2], 16))[2:]
+	return res
+
 
 if __name__ == '__main__' :
 	test = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
@@ -43,6 +56,6 @@ if __name__ == '__main__' :
 	
 	print('\n--- Test sur la traduction en binaire ---\n')
 	binaire = strToBin(test)
-	print(binaire)
+	print(binaire, '\n\n\n')
 	testFromBin = binToStr(binaire)
 	print(testFromBin)
