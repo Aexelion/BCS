@@ -93,7 +93,6 @@ if __name__ == '__main__':
 	res = ''
 	if args.decrypt:
 		res = Check_Then_Decrypt(text, mdp)
-		res = res.strip()
 	else:
 		res = Encrypt_Then_MAC(text, mdp)
 	
