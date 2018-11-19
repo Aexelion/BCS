@@ -4,7 +4,8 @@
 def strToHex(s):
 	res = ''
 	for i in s:
-		res += hex(ord(i))[2:]
+		tmp = hex(ord(i))[2:]
+		res += '0'*(2-len(tmp)) + tmp
 	return res
 
 
