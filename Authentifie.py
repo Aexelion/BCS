@@ -39,7 +39,7 @@ def Check_Then_Decrypt(hexa, mdp):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(
 	description='Chiffre/Déchiffre un message avec un mot de passe spécifié.',
-	epilog='Si aucune option n\'est spécifié, seul l\'option \'-e\' est prise en compte.'
+	epilog="Si aucune option n'est spécifié, cela revient à activer uniquement l'option '-e'. Les options '-d' et '-e' ne peuvent être utilisées en même temps."
 	)
 	parser.add_argument('-e', '--encrypt', 
 	action='store_true', 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 	)
 	parser.add_argument('-p', '--password',
 	action='store_true',
-	help='Permet de taper le mot de passe sans affichage.'
+	help='Permet d\'écrire le mot de passe sans affichage console.'
 	)
 	parser.add_argument('-o', '--output',
 	metavar='File', 
@@ -64,6 +64,12 @@ if __name__ == '__main__':
 	type=argparse.FileType('r'),
 	default=sys.stdin,
 	help='Spécifie un fichier d\'entrée.'
+	)
+	parser.add_argument('-k', '--key', 
+	metavar='File', 
+	type=argparse.FileType('r'), 
+	default=sys.stdin, 
+	help='Spécifie un fichier d\'entré pour la clé.'
 	)
 	
 	args = parser.parse_args()
@@ -85,10 +91,15 @@ if __name__ == '__main__':
 			text = input("Entrer le message à chiffrer :\n")
 		else :
 			text = args.input.read()
-	if args.password:
-		mdp = getpass("Entrer votre mot de passe : ")
+
+
+	if '<stdin>' == args.key.name:
+		if args.password:
+			mdp = getpass("Entrer votre mot de passe : ")
+		else:
+			mdp = input("Entrer votre mot de passe : ")
 	else:
-		mdp = input("Entrer votre mot de passe : ")
+		mdp = args.key.read()
 	
 	res = ''
 	if args.decrypt:
