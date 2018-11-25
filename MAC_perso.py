@@ -5,15 +5,18 @@ import trad
 
 
 def decoupe(hexa):
+	"""Fonction permettant de découper un message (en hexa) en message de taille 16 pour préparer l'entrée du chiffrement Midori.
+	Return le message découper ainsi qu'un booléen permettant de savoir si oui ou non le message à reçu du padding."""
 	pad = False
 	if len(hexa)%16 != 0 :
-		hexa += '8' + '0'*(16-(len(hexa)+1)%16)
+		hexa += '8' + '0'*(16-(len(hexa)%16+2)) + '1' #Padding utilisé : 1000 + 0000*
 		pad = True
 	res = [hexa[16*i : 16*(i+1)] for i in range(len(hexa)//16)]
 	return res, pad
 
 
 def lastBlock(block, key, pad):
+	"""Modification du dernier bloc en utilisant le principe de OMAC."""
 	input0 = [0 for i in range(16)]
 	k0 = midori(input0, key)
 	k1 = [k0[i] for i in range(15)]
@@ -38,6 +41,7 @@ def lastBlock(block, key, pad):
 
 
 def CMAC(hexa, key):
+	"""Fonction de calcul du MAC, en utilisant la méthode One-Key MAC (OMAC)."""
 	M, pad = decoupe(hexa)
 	res = '0'*16
 	M[-1] = lastBlock(M[-1], key, pad)
