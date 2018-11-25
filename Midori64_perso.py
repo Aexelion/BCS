@@ -31,10 +31,12 @@ resultat1 = [0x6, 0x6, 0xb, 0xc, 0xd, 0xc, 0x6, 0x2, 0x7, 0x0, 0xd, 0x9, 0x0, 0x
 
 
 def subCell(mot):
+	"""Fonction de substitution d'un mot de 4 bits via la SBox 1."""
 	return Sbox1[mot]
 
 
 def subCells(matrice):
+	"""Fonction de substitution de la matrice entière via la Sbox 1."""
 	res = [0 for i in range(16)]
 	for j in range(16):
 		res[j] = subCell(matrice[j])
@@ -42,6 +44,7 @@ def subCells(matrice):
 
 
 def shuffleCells(matrice):
+	"""Fonction de permutation de la matrice."""
 	res = [0 for i in range(16)]
 	for i in range(16):
 		res[i] = matrice[p[i]]
@@ -49,6 +52,7 @@ def shuffleCells(matrice):
 
 
 def invShuffleCells(matrice):
+	"""Fonction de permutation inverse de la matrice."""
 	res = [0 for i in range(16)]
 	for i in range(16):
 		res[i] = matrice[invP[i]]
@@ -56,6 +60,7 @@ def invShuffleCells(matrice):
 
 
 def mixColumn(matrice):
+	"""Fonction MixColumn lié a Midori."""
 	res = [0 for i in range(16)]
 	for i in range(4):
 		res[0+4*i] = matrice[1+4*i] ^ matrice[2+4*i] ^ matrice[3+4*i]
@@ -66,6 +71,7 @@ def mixColumn(matrice):
 
 
 def addKey(matrice, key):
+	"""Fonction d'ajout de clé dans la matrice. Il s'agit d'un XOR entre la clé et la matrice."""
 	res = [0 for i in range(16)]
 	for i in range(16):
 		res[i] = matrice[i] ^ key[i]
@@ -73,6 +79,9 @@ def addKey(matrice, key):
 
 
 def midori(m, k):
+	"""Fonction de chiffrement par bloc Midori.
+	Le message m en entrée est un tableau en hexa (compris entre 0 et 15) de taille 16.
+	La clé k en entrée est un tableau en hexa de taille 32."""
 	wk = addKey(k[0:16], k[16:32])
 	rk = [0 for i in range(16)]
 	
@@ -89,6 +98,9 @@ def midori(m, k):
 
 
 def antiMidori(m, k):
+	"""Fonction inverse de Midori.
+	Le message m en entrée est un tableau en hexa (compris entre 0 et 15) de taille 16.
+	La clé k en entrée est un tableau en hexa de taille 32."""
 	wk = addKey(k[0:16], k[16:32])
 	rk = [0 for i in range(16)]
 	
