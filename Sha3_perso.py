@@ -1,9 +1,8 @@
 #! /usr/bin/python3
-
+import trad
 
 def padding(M,r):
 	"""Ajoute du padding a un message quelconque afin de le rendre de taille multiple de r."""
-	
 	val = len(M + '11') % r
 	res = M + '1' + '0'*((r-val)%r) + '1'
 	return res
@@ -11,7 +10,6 @@ def padding(M,r):
 
 def toBlock(M, r):
 	"""Transforme un message de taille multiple de r en un tableau de partie de message tous de taille r."""
-	
 	k = len(M) // r
 	m = [M[r*i:r*(i+1)] for i in range(k)]
 	return m
@@ -19,7 +17,6 @@ def toBlock(M, r):
 
 def xor(block, m, r):
 	"""Realise un xor bit a bit entre un block de taille > r et un message de taille r."""
-	
 	res = [block[i] for i in range(len(block))]
 	for i in range(r):
 		res[i] = str(int(block[i])^int(m[i]))
@@ -28,7 +25,6 @@ def xor(block, m, r):
 
 def transformation(block):
 	"""Transforme un block de 1600 bits en une matrice 3 dimension 5*5*64."""
-	
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for ligne in range(5):
 		for colonne in range(5):
@@ -39,7 +35,6 @@ def transformation(block):
 
 def detransformation(matrice):
 	"""Transforme une matrice 3 dimension 5*5*64 en un block de 1600 bits."""
-	
 	res = ''
 	for ligne in range(5):
 		for colonne in range(5):
@@ -49,7 +44,6 @@ def detransformation(matrice):
 
 def cp(matrice, x, z):
 	"""Calcul de la parité de la colonne situé à l'emplacement x, z."""
-	
 	res = str(
 	int(matrice[x][0][z]) ^
 	int(matrice[x][1][z]) ^
@@ -61,8 +55,8 @@ def cp(matrice, x, z):
 
 
 def theta(matrice):
-	"""Fonction theta de Keccak realisé sur une matrice de 1600 bits découpé en matrice 5*5*64. Réalisation d'un ensemble de xor sur les différents bits de la matrice."""
-	
+	"""Fonction theta de Keccak realisé sur une matrice de 1600 bits découpé en matrice 5*5*64.
+	Réalisation d'un ensemble de xor sur les différents bits de la matrice."""
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for x in range(5):
 		for y in range(5):
@@ -77,8 +71,8 @@ def theta(matrice):
 
 
 def rho(matrice):
-	"""Fonction rho de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un ensemble de rotation sur les mots de 64 bits dans la matrice 5*5."""
-	
+	"""Fonction rho de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64.
+	Réalisation d'un ensemble de rotation sur les mots de 64 bits dans la matrice 5*5."""
 	rotation = [[0,36,3,41,18],[1,44,10,45,2],[62,6,43,15,61],[28,55,25,21,56],[27,20,39,8,14]]
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for x in range(5):
@@ -88,8 +82,8 @@ def rho(matrice):
 
 
 def pi(matrice):
-	"""Fonction pi de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un mélange des mots de 64 bits dans la matrice 5*5."""
-	
+	"""Fonction pi de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64.
+	Réalisation d'un mélange des mots de 64 bits dans la matrice 5*5."""
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for x in range(5):
 		for y in range(5):
@@ -98,8 +92,8 @@ def pi(matrice):
 
 
 def khi(matrice):
-	"""Fonction khi de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Réalisation d'un ensemble d'opération sur les différents bits de la matrice."""
-	
+	"""Fonction khi de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64.
+	Réalisation d'un ensemble d'opération sur les différents bits de la matrice."""
 	res = [['0'*64 for i in range(5)] for i in range(5)]
 	for x in range(5):
 		for y in range(5):
@@ -115,7 +109,6 @@ def khi(matrice):
 
 def hexToBin(hexa):
 	"""Transforme un nombre en hexadecimal en un mot de 64 bits."""
-	
 	res = bin(hexa)[2:]
 	res = '0'*(64-len(res))+res
 	return res
@@ -123,7 +116,6 @@ def hexToBin(hexa):
 
 def iota(matrice, roundNb):
 	"""Fonction iota de Keccak réalisé sur une matrice de 1600 bits découpée en matrice 5*5*64. Ajout d'une constante sur la 1ere ligne de la matrice 5*5 (située en 0,0)."""
-	
 	RC = [
 	0x0000000000000001, 0x0000000000008082, 0x800000000000808a,
 	0x8000000080008000, 0x000000000000808b, 0x0000000080000001,
@@ -167,7 +159,9 @@ def f(block, nbRound):
 ##Sha3-224 : r = 1152; c = 448
 
 def keccak(M, version):
-	"""Fonction de hash SHA-3. M est un message traduit en binaire. version est la version de keccak utilisé."""
+	"""Fonction de hash SHA-3. M est un message traduit en binaire.
+	M est un message de taille quelconque en binaire.
+	version est la version de keccak utilisé."""
 	v = {512:576, 384:832, 256:1088, 224:1152}
 	if (not version in v):
 		print('Version non valide pour Keccak.')
@@ -189,10 +183,11 @@ def keccak(M, version):
 
 
 if __name__ == "__main__" :
-	res = keccak('11010011', 512)
-	print(len(res), res)
-	print("\nMiaou !\n")
-	print("___/|\n\o.o|\n(___)\n  U")
+	res = keccak('01100010', 512)
+	res = trad.binToHex(res)
+	print(res)
+	#print("\nMiaou !\n")
+	#print("___/|\n\o.o|\n(___)\n  U")
 
 
 
