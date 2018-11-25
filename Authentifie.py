@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 from MAC_perso import CMAC
-from ModeOp import CTR
+from ModeOp import CTR, padding, unPadding
 from Sha3_perso import keccak
 import trad
 import argparse
@@ -10,7 +10,10 @@ from getpass import getpass
 
 
 def Encrypt_Then_MAC(message, mdp):
+	"""Fonction de chiffrement en utilisant le mode opératoire CTR avec le chiffrement par bloc Midori.
+	Une fois chiffrer, on calcul puis on ajoute le MAC en fin de chaîne."""
 	hexa = trad.strToHex(message)
+	hexa = padding(hexa)
 	mdpBin = trad.strToBin(mdp)
 	tmp = keccak(mdpBin, 512)
 	nonce = int(tmp[-32:], 2)
@@ -22,6 +25,9 @@ def Encrypt_Then_MAC(message, mdp):
 
 
 def Check_Then_Decrypt(hexa, mdp):
+	"""Fonction de déchiffrement en utilisant le mode opératoire CTR avec le chiffrement par bloc Midori.
+	Avant de déchiffrer, on calcul le MAC puis on le compare à celui en fin de chaîne afin de vérifier qu'il est correct.
+	Si le MAC est incorrect aucun déchiffremnt n'est effectué."""
 	res = ''
 	mdpBin = trad.strToBin(mdp)
 	tmp = keccak(mdpBin, 512)
@@ -30,6 +36,7 @@ def Check_Then_Decrypt(hexa, mdp):
 	keyMAC = [int(tmp[128+4*i:128+4*i+4], 2) for i in range(32)]
 	if CMAC(hexa[:-16], keyMAC) == hexa[-16:]:
 		res = CTR(nonce, hexa[:-16], keyCTR)
+		res = unPadding(res)
 		res = trad.hexToStr(res)
 	else :
 		res = 'vérification du MAC non valide'
@@ -111,16 +118,3 @@ if __name__ == '__main__':
 		print(res)
 	else:
 		args.output.write(res)
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
